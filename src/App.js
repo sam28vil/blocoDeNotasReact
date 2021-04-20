@@ -1,31 +1,35 @@
 import React, {Component} from 'react'
 import FormularioCadastro from './components/FormularioCadastro';
 import ListaDeNotas from "./components/ListaDeNotas";
+import ListaDeCategorias from './components/ListaDeCategorias'
 import "./assets/App.css";
 import "./assets/index.css"
+import Categorias from './dados/Categorias';
+import ArrayDeNotas from './dados/Notas';
 
-class App extends Component { 
+class App extends Component { //controla todo o estado (state) geral das aplicações
   constructor(){
     super();
-    this.state={ //serve p guardar valores/estado que podem vir a mudar com a interação do usuário com o componente// dinamismo
-      notas:[]
-    };
-  }
-
-  criarNota(titulo,texto){
-    const novaNota={titulo,texto}
-    const novoArrayNotas=[...this.state.notas,novaNota]
-    const novoEstado={
-      notas:novoArrayNotas
+    this.categorias= new Categorias();
+    this.notas= new ArrayDeNotas();
     }
-    this.setState(novoEstado) 
-  }
 
+ 
   render(){ //o proprio react gerencia o render, n pode chamar o render diretamente;
     return (
       <section className="conteudo">
-        <FormularioCadastro criarNota={this.criarNota.bind(this)} /* criar as informações */ /> 
-        <ListaDeNotas notas={this.state.notas} /*salvar as informações */ /> 
+        <FormularioCadastro 
+        categorias={this.categorias} 
+        criarNota={this.notas.adicionarNota.bind(this.notas)} /* criar as informações */ /> 
+        <main className="conteudo-principal">
+        <ListaDeCategorias
+        adicionarCategoria={this.categorias.adicionarCategoria.bind(this.categorias)}
+        categorias={this.categorias} />
+        <ListaDeNotas
+        apagarNota={this.notas.apagarNota.bind(this.notas)}
+        notas={this.notas} /*salvar as informações *//>
+
+        </main>
   
       </section>
     );
